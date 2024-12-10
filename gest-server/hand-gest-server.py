@@ -1,7 +1,7 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 # Initialize the mediapipe hands class.
 mp_hands = mp.solutions.hands
@@ -122,6 +122,8 @@ mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.5)
 
 
+# Flask server Code
+app = Flask(__name__)
 @app.route('/process_frame', methods=['POST'])
 def process_frame():
     try:
@@ -141,12 +143,10 @@ def process_frame():
         # Display the received frame for debugging (optional)
         cv2.imwrite("debug_frame.jpg", frame)  # Save the frame for verification
         
-        # Process the frame (example: return a dummy action name)
+        # Process the frame
         gesture = processFrame(frame)  # Replace this with your actual processing logic
         
-
-        
-        return gesture, 200
+        return jsonify({'gesture':gesture}), 200
     except Exception as e:
         return f"Error occurred: {str(e)}", 500
 

@@ -1,2 +1,9 @@
-*/models
+*/models/
 *.DS_Store
+*/Model/
+*.zip
+*.jpg
+*.png
+*.dat
+*.pt
+facesV2/

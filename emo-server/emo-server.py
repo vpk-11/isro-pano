@@ -3,13 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 import os
+import math
 import pandas as pd
 import dlib
-from imutils import *
 from imutils import face_utils
-from tensorflow.keras.optimizers import *
-from keras.layers import *
-import math
+from tensorflow.keras.layers import *
 from flask import Flask, request, jsonify
 
 # Uncomment line no 33,34 on this block to see the points plotted on the image 
@@ -25,7 +23,7 @@ Function to get all the specific landmarks from face and
 def getLandMarkFromFace(image):
 	# Load the detector
 	detector = dlib.get_frontal_face_detector()
-	predictor = dlib.shape_predictor("Emo/shape_predictor_68_face_landmarks.dat")
+	predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 
 	# Convert image into grayscale
 	gray = cv2.cvtColor(src=image, code=cv2.COLOR_BGR2GRAY)
@@ -124,7 +122,7 @@ def getLandMarkFromFace(image):
 
 # Function to predict single emotion and its intensity by modelname and points extracted from image
 def modelPrediction(modelName,row):
-	emoModel = tf.keras.models.load_model("./Emo/Model/"+modelName) 
+	emoModel = tf.keras.models.load_model("./Model/"+modelName) 
 	if len(row)==52:
 		row=pd.DataFrame(np.array([row]))
 		p = emoModel.predict(row,verbose = 0)
@@ -211,9 +209,13 @@ def process_frame():
         # Process the frame
         emotion = detectEmotion(frame)  # Replace this with your actual processing logic
         
-        return jsonify({'emotion':emotion}), 200
+        # return jsonify({'emotion':emotion}), 200
+        return emotion, 200
     except Exception as e:
         return f"Error occurred: {str(e)}", 500
 
 if __name__ == '__main__':
 	app.run(port=8000,debug=True)
+
+
+

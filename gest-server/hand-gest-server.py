@@ -146,7 +146,8 @@ def process_frame():
         # Process the frame
         gesture = processFrame(frame)  # Replace this with your actual processing logic
         
-        return jsonify({'gesture':gesture}), 200
+        # return jsonify({'gesture':gesture}), 200
+        return gesture, 200
     except Exception as e:
         return f"Error occurred: {str(e)}", 500
 
